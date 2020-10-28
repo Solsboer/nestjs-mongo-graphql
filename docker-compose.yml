@@ -1,0 +1,36 @@
+version: "2"
+services:
+  # ========================================================================
+  # Main development containers
+  # ========================================================================
+  node:
+    container_name: "nest"
+    build: ./build/development/node
+    environment:
+      - "NODE_ENV=development"
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 2021:2021
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    command: "npm run start:dev"
+
+  mongodb:
+        image: mongo:latest
+        container_name: "nest-mongo-db"
+        environment:
+          - MONGO_DATA_DIR=/var/mongo
+          - MONGO_LOG_DIR=/dev/null
+        volumes:
+          - ./data/db:/data/db
+        ports:
+            - 27018:27018
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+networks:
+  default:
+    external:
+      name: nest
