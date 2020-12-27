@@ -5,6 +5,7 @@
 type User {
   id: ID!
   email: String!
+  password: String!
   name: String!
   phone: String
   updatedAt: DateTime!
@@ -18,6 +19,7 @@ scalar DateTime
 
 type Query {
   getUsers: [User!]!
+  me: User!
 }
 
 type Mutation {

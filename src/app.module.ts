@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -11,10 +11,12 @@ import { UserModule } from './user/user.module';
           autoSchemaFile: 'schema.gql',
           debug: true,
           playground: true,
+          context: ({req}) => ({headers: req.headers})
       }),
-      ConfigModule.forRoot(),
+      ConfigModule.forRoot({ isGlobal: true }),
       MongooseModule.forRoot('mongodb://nest-mongo-db/nest-mongo'),
-      UserModule
+      UserModule,
+      AuthModule
   ],
   controllers: [],
   providers: [],
