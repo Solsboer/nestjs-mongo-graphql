@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
 import { NewUserInput } from "../dto/new-user.input";
@@ -6,6 +6,8 @@ import { UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "../../auth/guards/gql-auth.guard";
 import { CurrentUser } from "../decorator/current-user.decorator";
 import { JwtUserData } from "../dto/jwt-user-data";
+import { Role } from "../../auth/types/roles.enum";
+import { Auth } from "../../auth/decorator/auth.decorator";
 
 @Resolver()
 export class UserResolver {
@@ -15,6 +17,7 @@ export class UserResolver {
     }
 
     @Query(() => [User])
+    @Auth(Role.Admin)
     async getUsers() {
         return this.userService.findAll();
 

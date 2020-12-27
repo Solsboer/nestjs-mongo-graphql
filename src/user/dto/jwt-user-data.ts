@@ -9,4 +9,8 @@ export class JwtUserData {
     @Field()
     @MaxLength(100)
     email: string;
+
+    @Field()
+    @MaxLength(100)
+    role: string;
 }

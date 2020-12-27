@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Role } from "../../auth/types/roles.enum";
 
 @ObjectType()
 export class User {
@@ -16,6 +17,9 @@ export class User {
 
     @Field({ nullable: true })
     phone?: string;
+
+    @Field({ defaultValue: Role.Guest })
+    role?: Role;
 
     @Field()
     updatedAt: Date;
