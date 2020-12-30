@@ -1,23 +1,30 @@
-version: "2"
+version: "3.9"
 services:
   # ========================================================================
   # Main development containers
   # ========================================================================
   node:
-    container_name: "nest"
     build: ./build/development/node
     environment:
       - "NODE_ENV=development"
     working_dir: /home/node/app
     volumes:
       - ./:/home/node/app
-    ports:
-      - 2021:2021
     links:
       - mongodb
     depends_on:
       - mongodb
     command: "npm run start:dev"
+    networks:
+      - balance
+    deploy:
+      replicas: 2
+      mode: replicated
+      update_config:
+        parallelism: 3
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
   mongodb:
         image: mongo:latest
@@ -28,9 +35,11 @@ services:
         volumes:
           - ./data/db:/data/db
         ports:
-            - 27018:27018
+            - 27018:27017
         command: mongod --smallfiles --logpath=/dev/null # --quiet
 networks:
   default:
     external:
       name: nest
+  balance:
+    driver: overlay

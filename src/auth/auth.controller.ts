@@ -12,4 +12,10 @@ export class AuthController {
         console.log(req.user, 'user');
         return this.authService.login(req.user);
     }
+
+    @Get()
+    getHello(): string {
+        console.log('ping')
+        return `hello from Pid: ${process.pid}`;
+    }
 }
